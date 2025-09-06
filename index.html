@@ -7,116 +7,128 @@
 <meta name="theme-color" content="#FFFFFF" />
 <style>
   :root{
-    /* PALETA (anexo: amarelo+azuis) */
-    --bg:#ffffff;        /* fundo claro */
-    --text:#0E1116;      /* texto principal */
-    --muted:#2F3A56;     /* azul acinzentado p/ subtítulos */
-    --surface:#F5F8FF;   /* cartões bem claros (leve azulado) */
-    --border:#E3E8F2;    /* borda suave */
+    /* MONOCHROME — simples e elegante */
+    --bg:#f7f7f9;          /* fundo geral (cinza Apple) */
+    --surface:#ffffff;     /* cartões/áreas */
+    --text:#111113;        /* texto principal */
+    --muted:#6b7280;       /* texto secundário */
+    --border:#e5e7eb;      /* bordas sutis */
 
-    --blue:#2F55C7;      /*  azul royal (botão primário) */
-    --navy:#0A2D6F;      /*  azul marinho (detalhe) */
-    --sky:#3FA2E5;       /*  azul claro (realce) */
-    --yellow:#F2CA2C;    /*  amarelo (secundário) */
-    --cream:#FFF3DE;     /*  creme (apoio/hover) */
+    --primary:#111113;     /* preto: botões principais */
+    --primary-ink:#ffffff; /* texto em cima do preto */
 
-    /* UI */
-    --radius:14px;
-    --radius-chip:8px;   /* menos arredondado */
-    --shadow:0 6px 22px rgba(0,0,0,.06);
-    --max-aside:820px;
+    --radius:12px;
+    --radius-chip:8px;
+    --shadow:0 8px 24px rgba(0,0,0,.06);
     --gap:16px;
+
+    --aside-width:540px;   /* coluna direita fixa (~500 + paddings) */
+    --prompt-width:500px;  /* banner e textarea terão esta largura */
     --font:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,system-ui,sans-serif;
   }
+
   *{box-sizing:border-box}
   html,body{height:100%}
-  body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.5 var(--font)}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font:400 16px/1.5 var(--font); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
 
-  /* Topbar mais estreito + logo maior */
+  /* Topbar (estreito) */
   .topbar{
     position:sticky; top:0; z-index:30;
-    background:color-mix(in oklab, var(--surface) 92%, white);
+    background:var(--surface);
     border-bottom:1px solid var(--border);
-    display:grid; place-items:center; padding:6px 12px; /* mais estreito */
+    display:grid; place-items:center; padding:6px 10px; /* mais fino */
   }
-  .topbar .logo{display:flex; align-items:center; gap:10px}
-  .topbar img{height:clamp(44px, 6vw, 64px); width:auto; display:block} /* logo maior */
+  .topbar .logo{display:flex; align-items:center; gap:8px}
+  .topbar img{height:clamp(28px,4.5vw,40px); width:auto; display:block} /* logo menor */
 
-  /* Layout */
-  .wrap{display:grid; gap:var(--gap); grid-template-columns:1fr; padding:16px; max-width:1400px; margin:0 auto;}
-  @media (min-width:1100px){ .wrap{grid-template-columns:1fr minmax(680px,var(--max-aside)); align-items:start;} }
+  /* Layout: configurador amplo + aside fixo */
+  .wrap{
+    display:grid; gap:var(--gap);
+    grid-template-columns:1fr; padding:18px; max-width:1400px; margin:0 auto;
+  }
+  @media (min-width:1100px){
+    .wrap{grid-template-columns:minmax(0,1fr) var(--aside-width); align-items:start;}
+  }
+
   .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);}
-  .builder{padding:18px}
-  .builder h2{margin:0 0 10px; font-size:20px; font-weight:700;} /* título menor */
-  .section-title{font-size:13px; color:var(--muted); margin:8px 0 6px}
-  label[for=tema]{display:block; font-size:13px; color:var(--muted); margin:4px 0 6px}
+
+  /* Builder (configuração aumentada) */
+  .builder{padding:16px 18px}
+  .builder h2{margin:0 0 8px; font-size:18px; font-weight:700;} /* título menor */
+  label[for=tema], .section-title{font-size:13px; color:var(--muted); margin:6px 0}
   #tema{
     width:100%; border:1px solid var(--border); background:#fff; color:var(--text);
-    padding:10px 12px; border-radius:12px; font-size:15px; outline:none;
+    padding:10px 12px; border-radius:10px; font-size:15px; outline:none;
   }
-  #tema::placeholder{color:#91A3C1}
+  #tema::placeholder{color:#9aa3af}
 
-  /* Chips menores + sem estourar texto (até 2 linhas) */
-  .chips{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px}
+  /* Chips — menores e discretos, clamp em 2 linhas */
+  .chips{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:8px}
   @media (min-width:640px){ .chips{grid-template-columns:repeat(3,minmax(0,1fr));} }
-  @media (min-width:1100px){ .chips{grid-template-columns:repeat(5,minmax(0,1fr));} } /* mais colunas no desktop */
+  @media (min-width:1200px){ .chips{grid-template-columns:repeat(5,minmax(0,1fr));} }
   .chip{
-    border:1px solid var(--border); background:#fff; color:var(--text);
+    background:#fff; border:1px solid var(--border); color:var(--text);
     border-radius:var(--radius-chip); padding:7px 10px; font-size:12px; line-height:1.25; cursor:pointer;
-    display:block; text-align:center; transition:.15s ease;
-    overflow:hidden; /* clamp 2 linhas */
-    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+    transition:.15s ease; text-align:center;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
   }
-  .chip:hover{background:var(--cream)}
+  .chip:hover{background:#fafafa}
   .chip[data-selected="true"]{
-    background:color-mix(in oklab, var(--sky) 12%, white);
-    border-color:#BFD9F1; box-shadow: inset 0 0 0 1px rgba(63,162,229,.18);
+    background:#f3f4f6; border-color:#d1d5db; box-shadow:inset 0 0 0 1px #e5e7eb;
   }
 
-  /* Ações */
+  /* Botões */
   .actions{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
   .btn{
     appearance:none; border:1px solid var(--border); background:#fff; color:var(--text);
-    padding:10px 14px; border-radius:12px; font-size:14px; cursor:pointer; transition:.15s ease;
+    padding:10px 14px; border-radius:10px; font-size:14px; cursor:pointer; transition:.15s;
   }
   .btn:hover{box-shadow:var(--shadow)}
-  .btn.primary{background:var(--blue); color:#fff; border:none; font-weight:700}
-  .btn:disabled{opacity:.45; cursor:not-allowed; box-shadow:none}
+  .btn.primary{background:var(--primary); color:var(--primary-ink); border-color:var(--primary); font-weight:700}
+  .btn:disabled{opacity:.5; cursor:not-allowed; box-shadow:none}
 
-  /* Lateral (resultado) */
-  .aside{position:sticky; top:64px; padding:14px}
-  /* slot de anúncio acima do prompt */
+  /* Aside (resultado fixo) */
+  .aside{position:sticky; top:56px; padding:12px}
+  .stack{max-width:var(--prompt-width); margin:0 auto;} /* centraliza banner + textarea */
+
+  /* Banner 500x180 responsivo (mantém proporção) */
   .ad{display:flex; justify-content:center; align-items:center; margin:0 0 10px 0}
-  .ad .ad-box{
-    background:#fff; border:1px dashed var(--border); color:var(--muted);
-    display:flex; align-items:center; justify-content:center; font-size:13px; border-radius:12px;
-    width:300px; height:300px; /* mobile default */
+  .ad .box{
+    width:min(var(--prompt-width), 100%);
+    aspect-ratio:500/180; /* mantém 500x180 */
+    border:1px dashed var(--border); border-radius:10px;
+    background:#fff; color:var(--muted); display:flex; align-items:center; justify-content:center; font-size:13px;
   }
-  @media (min-width:700px){ .ad .ad-box{ width:468px; height:60px; } }     /* tablet */
-  @media (min-width:1100px){ .ad .ad-box{ width:728px; height:90px; } }    /* desktop */
 
+  /* Textarea com mesma largura do banner (500) e altura reduzida */
   textarea#saida{
-    width:100%; min-height:38vh; /* mais baixo */
-    resize:vertical; padding:10px 12px; border-radius:12px;
+    width:min(var(--prompt-width), 100%);
+    min-height:32vh; /* mais baixo */
+    resize:vertical; padding:10px 12px; border-radius:10px;
     border:1px solid var(--border); background:#fff; color:var(--text);
-    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:13.5px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; font-size:13.5px;
+    display:block; margin:0 auto;
   }
 
-  .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#fff; color:var(--text); padding:10px 14px; border:1px solid var(--border); border-radius:999px; opacity:0; transition:.2s; z-index:60}
+  .muted{color:var(--muted); font-size:12.5px}
+  .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#111; color:#fff; padding:8px 12px; border-radius:999px; opacity:0; transition:.2s; z-index:60}
   .toast.show{opacity:1}
   .info{margin-top:6px; font-size:12px; color:var(--muted)}
 </style>
 </head>
 <body>
   <!-- Topbar -->
-  <header class="topbar card">
+  <header class="topbar">
     <div class="logo" aria-label="direito.love">
       <img src="icons/logo.png" alt="direito.love">
     </div>
   </header>
 
   <div class="wrap">
-    <!-- Builder -->
+    <!-- Configurador (amplo) -->
     <main class="builder card" id="builder" aria-labelledby="titulo-builder">
       <h2 id="titulo-builder">Criador de Prompts — Estudantes de Direito</h2>
 
@@ -133,29 +145,24 @@
       <div class="info">A <strong>ordem dos cliques</strong> define a sequência das sessões no prompt.</div>
     </main>
 
-    <!-- Lateral (sem título/descrição) -->
+    <!-- Resultado (fixo, 500px de largura interna) -->
     <aside class="aside card">
-      <!-- Anúncio responsivo (placeholder). Substitua pela tag AdSense INS se quiser -->
-      <div class="ad">
-        <div class="ad-box">
-          <!-- Exemplo AdSense (substitua pelo seu código):
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-XXXX"
-               data-ad-slot="YYYY"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
-          <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-          -->
-          Anúncio • 300×300 / 468×60 / 728×90 (auto)
+      <div class="stack">
+        <!-- Substitua pelo AdSense: mantém 500x180 (responsivo) -->
+        <div class="ad">
+          <div class="box">
+            <!-- Coloque aqui sua tag AdSense <ins> com data-full-width-responsive="true" -->
+            Anúncio • 500×180 (auto scale)
+          </div>
         </div>
-      </div>
 
-      <textarea id="saida" readonly placeholder="(vazio)"></textarea>
-      <div class="actions" style="margin-top:10px">
-        <button id="copiar2" class="btn">Copiar</button>
-        <button id="compartilhar2" class="btn">Compartilhar</button>
-        <button id="novo2" class="btn">Novo</button>
+        <textarea id="saida" readonly placeholder="(vazio)"></textarea>
+
+        <div class="actions" style="margin:10px auto 0; width:min(var(--prompt-width),100%);">
+          <button id="copiar2" class="btn">Copiar</button>
+          <button id="compartilhar2" class="btn">Compartilhar</button>
+          <button id="novo2" class="btn">Novo</button>
+        </div>
       </div>
     </aside>
   </div>
@@ -166,29 +173,14 @@
 (function(){
   const $ = (s, r=document) => r.querySelector(s);
   const $$ = (s, r=document) => [...r.querySelectorAll(s)];
-  const toast = (msg, t=1800)=>{const el=$("#toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"), t);};
+  const toast = (msg, t=1600)=>{const el=$("#toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"), t);};
 
   const SESSOES = [
-    "Conceitos e Definições",
-    "Base Legal Essencial",
-    "Jurisprudência Majoritária",
-    "Doutrina Relevante",
-    "Exemplos e Casos Práticos",
-    "Quadro Comparativo",
-    "Questões de Fixação",
-    "Debates, Críticas e Tendências",
-    "Súmulas e Enunciados",
-    "Estrutura de Peça / Modelos",
-    "Checklist de Peça",
-    "Raciocínio Jurídico (passo a passo)",
-    "Mapa Mental",
-    "Flashcards",
-    "Erros Comuns",
-    "Checklist Final de Revisão",
-    "Casos Famosos / Leading Cases",
-    "Atualizações Recentes",
-    "Dicas de Prova (OAB/Concursos)",
-    "Referências Bibliográficas"
+    "Conceitos e Definições","Base Legal Essencial","Jurisprudência Majoritária","Doutrina Relevante",
+    "Exemplos e Casos Práticos","Quadro Comparativo","Questões de Fixação","Debates, Críticas e Tendências",
+    "Súmulas e Enunciados","Estrutura de Peça / Modelos","Checklist de Peça","Raciocínio Jurídico (passo a passo)",
+    "Mapa Mental","Flashcards","Erros Comuns","Checklist Final de Revisão",
+    "Casos Famosos / Leading Cases","Atualizações Recentes","Dicas de Prova (OAB/Concursos)","Referências Bibliográficas"
   ];
 
   const BASE_PROMPT = `Você deve assumir a persona de uma **equipe de professores especialistas em todas as áreas do Direito brasileiro**, formada também por **pesquisadores de súmulas e jurisprudências**. Todos fazem parte da equipe **direito.love**.
@@ -238,7 +230,7 @@ Ao finalizar todas as sessões solicitadas, conclua sempre com:
   const compartilhar2 = $("#compartilhar2");
   const novo2 = $("#novo2");
 
-  // Monta chips (com clamp de 2 linhas)
+  // Monta chips
   SESSOES.forEach((nome, idx)=>{
     const b = document.createElement("button");
     b.className="chip"; b.type="button"; b.setAttribute("aria-pressed","false");
@@ -270,8 +262,7 @@ Ao finalizar todas as sessões solicitadas, conclua sempre com:
   limparBtn.addEventListener("click", ()=>{
     temaEl.value=""; selected.length=0; saida.value="";
     $$(".chip", chipsBox).forEach(c=>{c.dataset.selected="false"; c.setAttribute("aria-pressed","false");});
-    updateCTA(); toast("Limpou tudo.");
-    window.scrollTo({top:0, behavior:"smooth"});
+    updateCTA(); toast("Limpou tudo."); window.scrollTo({top:0, behavior:"smooth"});
   });
 
   criarBtn.addEventListener("click", ()=>{
