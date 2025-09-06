@@ -1,4 +1,11 @@
-uest<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>direito.love — Criador de Prompts</title>
+<meta name="theme-color" content="#FFFFFF" />
+<style><!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
@@ -6,6 +13,171 @@ uest<!DOCTYPE html>
 <title>direito.love — Criador de Prompts</title>
 <meta name="theme-color" content="#FFFFFF" />
 <style>
+  :root{
+    /* MONOCHROME — simples e elegante */
+    --bg:#f7f7f9;          /* fundo geral (cinza Apple) */
+    --surface:#ffffff;     /* cartões/áreas */
+    --text:#111113;        /* texto principal */
+    --muted:#6b7280;       /* texto secundário */
+    --border:#e5e7eb;      /* bordas sutis */
+
+    --primary:#111113;     /* preto: botões principais */
+    --primary-ink:#ffffff; /* texto em cima do preto */
+
+    --radius:12px;
+    --radius-chip:8px;
+    --shadow:0 8px 24px rgba(0,0,0,.06);
+    --gap:16px;
+
+    --aside-width:440px;   /* coluna direita mais estreita */
+    --prompt-width:400px;  /* banner e textarea agora com 400px */
+    --font:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,system-ui,sans-serif;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font:400 16px/1.5 var(--font); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+
+  /* Topbar (estreito) */
+  .topbar{
+    position:sticky; top:0; z-index:30;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    display:grid; place-items:center; padding:6px 10px; /* mais fino */
+  }
+  .topbar .logo{display:flex; align-items:center; gap:8px}
+  .topbar img{height:clamp(28px,4.5vw,40px); width:auto; display:block} /* logo menor */
+
+  /* Layout: configurador amplo + aside fixo */
+  .wrap{
+    display:grid; gap:var(--gap);
+    grid-template-columns:1fr; padding:18px; max-width:1400px; margin:0 auto;
+  }
+  @media (min-width:1100px){
+    .wrap{grid-template-columns:minmax(0,1fr) var(--aside-width); align-items:start;}
+  }
+
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);}
+
+  /* Builder (configuração aumentada) */
+  .builder{padding:16px 18px}
+  .builder h2{margin:0 0 8px; font-size:18px; font-weight:700;} /* título menor */
+  label[for=tema], .section-title{font-size:13px; color:var(--muted); margin:6px 0}
+  #tema{
+    width:100%; border:1px solid var(--border); background:#fff; color:var(--text);
+    padding:10px 12px; border-radius:10px; font-size:15px; outline:none;
+  }
+  #tema::placeholder{color:#9aa3af}
+
+  /* Chips */
+  .chips{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:8px}
+  @media (min-width:640px){ .chips{grid-template-columns:repeat(3,minmax(0,1fr));} }
+  @media (min-width:1200px){ .chips{grid-template-columns:repeat(5,minmax(0,1fr));} }
+  .chip{
+    background:#fff; border:1px solid var(--border); color:var(--text);
+    border-radius:var(--radius-chip); padding:7px 10px; font-size:12px; line-height:1.25; cursor:pointer;
+    transition:.15s ease; text-align:center;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .chip:hover{background:#fafafa}
+  .chip[data-selected="true"]{
+    background:#f3f4f6; border-color:#d1d5db; box-shadow:inset 0 0 0 1px #e5e7eb;
+  }
+
+  /* Botões */
+  .actions{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
+  .btn{
+    appearance:none; border:1px solid var(--border); background:#fff; color:var(--text);
+    padding:10px 14px; border-radius:10px; font-size:14px; cursor:pointer; transition:.15s;
+  }
+  .btn:hover{box-shadow:var(--shadow)}
+  .btn.primary{background:var(--primary); color:var(--primary-ink); border-color:var(--primary); font-weight:700}
+  .btn:disabled{opacity:.5; cursor:not-allowed; box-shadow:none}
+
+  /* Aside (resultado fixo) */
+  .aside{position:sticky; top:56px; padding:12px}
+  .stack{max-width:var(--prompt-width); margin:0 auto;}
+
+  /* Banner 400x180 responsivo */
+  .ad{display:flex; justify-content:center; align-items:center; margin:0 0 10px 0}
+  .ad .box{
+    width:min(var(--prompt-width), 100%);
+    aspect-ratio:400/180; /* mantém proporção */
+    border:1px dashed var(--border); border-radius:10px;
+    background:#fff; color:var(--muted); display:flex; align-items:center; justify-content:center; font-size:13px;
+  }
+
+  /* Textarea com mesma largura do banner (400) */
+  textarea#saida{
+    width:min(var(--prompt-width), 100%);
+    min-height:32vh;
+    resize:vertical; padding:10px 12px; border-radius:10px;
+    border:1px solid var(--border); background:#fff; color:var(--text);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; font-size:13.5px;
+    display:block; margin:0 auto;
+  }
+
+  .muted{color:var(--muted); font-size:12.5px}
+  .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#111; color:#fff; padding:8px 12px; border-radius:999px; opacity:0; transition:.2s; z-index:60}
+  .toast.show{opacity:1}
+  .info{margin-top:6px; font-size:12px; color:var(--muted)}
+</style>
+</head>
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="logo" aria-label="direito.love">
+      <img src="icons/logo.png" alt="direito.love">
+    </div>
+  </header>
+
+  <div class="wrap">
+    <!-- Configurador -->
+    <main class="builder card" id="builder" aria-labelledby="titulo-builder">
+      <h2 id="titulo-builder">Criador de Prompts — Estudantes de Direito</h2>
+
+      <label for="tema">Tema</label>
+      <input id="tema" maxlength="120" placeholder="Digite aqui o tema que deseja estudar..." autocomplete="off" />
+
+      <div class="section-title">Selecione como quer estudar:</div>
+      <div class="chips" id="chips" aria-label="Sessões disponíveis"></div>
+
+      <div class="actions">
+        <button id="criar" class="btn primary" disabled>Criar Prompt</button>
+        <button id="limpar" class="btn" title="Limpar seleções">Limpar</button>
+      </div>
+      <div class="info">A <strong>ordem dos cliques</strong> define a sequência das sessões no prompt.</div>
+    </main>
+
+    <!-- Resultado -->
+    <aside class="aside card">
+      <div class="stack">
+        <div class="ad">
+          <div class="box">Anúncio • 400×180 (auto scale)</div>
+        </div>
+
+        <textarea id="saida" readonly placeholder="(vazio)"></textarea>
+
+        <div class="actions" style="margin:10px auto 0; width:min(var(--prompt-width),100%);">
+          <button id="copiar2" class="btn">Copiar</button>
+          <button id="compartilhar2" class="btn">Compartilhar</button>
+          <button id="novo2" class="btn">Novo</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* JS permanece igual ao seu */
+</script>
+</body>
+</html>
+
   :root{
     /* MONOCHROME — simples e elegante */
     --bg:#f7f7f9;          /* fundo geral (cinza Apple) */
