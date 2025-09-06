@@ -4,61 +4,43 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>direito.love — Criador de Prompts</title>
-<meta name="theme-color" content="#0c0d10" />
+<meta name="theme-color" content="#FFFFFF" />
 <style>
   :root{
-  --bg:#ffffff;          /* fundo */
-  --surface:#ECF3F1;     /* cartões/áreas */
-  --text:#0E1116;        /* texto principal */
-  --muted:#50606E;       /* texto secundário (derivado do azul-cinza) */
-  --border:#D7E6E1;      /* linhas */
-  --accent:#49A97D;      /* verde-teal principal */
-  --accent-2:#69BFAC;    /* verde-teal claro */
-  --chip:#ffffff;        /* chip base */
-  --chip-hover:#F5FAF8;
-  --chip-on:#E6F5F0;     /* chip selecionado */
-  --chip-on-border:#BFE6D9;
-  --radius:14px;
-  --shadow:0 8px 28px rgba(0,0,0,.08);
-  --max-aside:820px;
-  --gap:16px;
-  --font:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,system-ui,sans-serif;
-}
-
+    --bg:#ffffff;
+    --surface:#ECF3F1;
+    --text:#0E1116;
+    --muted:#50606E;      /* puxando do #405B73 suavizado */
+    --border:#D7E6E1;
+    --accent:#49A97D;
+    --accent-2:#69BFAC;
+    --chip:#ffffff;
+    --chip-hover:#F5FAF8;
+    --chip-on:#E6F5F0;
+    --chip-on-border:#BFE6D9;
+    --radius:14px;
+    --shadow:0 8px 28px rgba(0,0,0,.08);
+    --max-aside:820px;
+    --gap:16px;
+    --font:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,system-ui,sans-serif;
+  }
   *{box-sizing:border-box}
   html,body{height:100%}
-  body{
-    margin:0; background:var(--bg); color:var(--text); font:400 16px/1.5 var(--font);
-    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-  }
+  body{margin:0; background:var(--bg); color:var(--text); font:400 16px/1.5 var(--font); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
   /* Topbar */
-  .topbar{
-    position:sticky; top:0; z-index:30; backdrop-filter:saturate(1.2) blur(6px);
-    background:color-mix(in oklab, var(--surface) 88%, transparent);
-    border-bottom:1px solid var(--border);
-    display:grid; place-items:center; padding:10px 16px;
-  }
+  .topbar{position:sticky; top:0; z-index:30; background:color-mix(in oklab, var(--surface) 92%, white); border-bottom:1px solid var(--border); display:grid; place-items:center; padding:10px 16px;}
   .topbar .logo{display:flex; align-items:center; gap:10px}
   .topbar img{height:32px; width:auto; display:block}
   .topbar .brand{font-weight:600; letter-spacing:.2px; color:var(--muted)}
   /* Layout */
   .wrap{display:grid; gap:var(--gap); grid-template-columns:1fr; padding:20px; max-width:1400px; margin:0 auto;}
-  @media (min-width: 1100px){
-    .wrap{grid-template-columns:1fr minmax(680px, var(--max-aside)); align-items:start;}
-  }
-  .card{
-    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
-    box-shadow:var(--shadow);
-  }
+  @media (min-width:1100px){ .wrap{grid-template-columns:1fr minmax(680px,var(--max-aside)); align-items:start;} }
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);}
   .builder{padding:20px}
   .section-title{font-size:14px; color:var(--muted); margin:8px 0 6px}
   label[for=tema]{display:block; font-size:14px; color:var(--muted); margin:4px 0 6px}
-  #tema{
-    width:100%; border:1px solid var(--border); background:#0f1116; color:var(--text);
-    padding:14px 14px; border-radius:12px; font-size:16px; outline:none;
-  }
-  #tema::placeholder{color:#6e7481}
-  /* Chips */
+  #tema{width:100%; border:1px solid var(--border); background:#fff; color:var(--text); padding:14px; border-radius:12px; font-size:16px; outline:none;}
+  #tema::placeholder{color:#7C8C99}
   .chips{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:10px}
   @media (min-width:640px){ .chips{grid-template-columns:repeat(3,minmax(0,1fr));} }
   @media (min-width:900px){ .chips{grid-template-columns:repeat(4,minmax(0,1fr));} }
@@ -70,49 +52,25 @@
   .chip:hover{background:var(--chip-hover)}
   .chip[data-selected="true"]{
     background:var(--chip-on); border-color:var(--chip-on-border);
-    box-shadow: inset 0 0 0 1px rgba(6,214,160,.25), 0 6px 18px rgba(6,214,160,.08);
+    box-shadow: inset 0 0 0 1px rgba(73,169,125,.25);
   }
   .chip .tick{display:none}
   .chip[data-selected="true"] .tick{display:inline; color:var(--accent)}
-  /* CTA */
-  .actions{display:flex; gap:10px; margin-top:16px}
-  .btn{
-    appearance:none; border:1px solid var(--border); background:#0e1117; color:var(--text);
-    padding:12px 16px; border-radius:12px; font-size:15px; cursor:pointer; transition:.15s ease;
-  }
+  .actions{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap}
+  .btn{appearance:none; border:1px solid var(--border); background:#fff; color:var(--text); padding:12px 16px; border-radius:12px; font-size:15px; cursor:pointer; transition:.15s ease;}
   .btn:hover{box-shadow:var(--shadow)}
-  .btn.primary{background:linear-gradient(90deg,var(--accent), var(--accent-2)); color:#0b1210; border:none; font-weight:600}
+  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#083428; border:none; font-weight:600}
   .btn:disabled{opacity:.45; cursor:not-allowed; box-shadow:none}
-  /* Aside (resultado) */
   .aside{position:sticky; top:74px; padding:16px}
   .aside h3{margin:0 0 10px}
-  textarea#saida{
-    width:100%; min-height:60vh; resize:vertical; padding:14px; border-radius:12px;
-    border:1px solid var(--border); background:#0f1116; color:var(--text); font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:14px;
-  }
+  textarea#saida{width:100%; min-height:60vh; resize:vertical; padding:14px; border-radius:12px; border:1px solid var(--border); background:#fff; color:var(--text); font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:14px;}
   .muted{color:var(--muted); font-size:13px}
-  /* Modal */
-  .overlay{position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; place-items:center; z-index:40}
-  .overlay.open{display:grid}
-  .modal{width:min(92vw,720px); background:var(--surface); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow)}
-  .modal header{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border)}
-  .modal h4{margin:0}
-  .modal .x{background:transparent; border:none; color:var(--muted); font-size:22px; cursor:pointer}
-  .modal .body{padding:16px}
-  .checklist{display:grid; gap:8px; grid-template-columns:1fr 1fr}
-  @media (max-width:600px){ .checklist{grid-template-columns:1fr} }
-  .item{display:flex; gap:10px; align-items:flex-start; padding:10px 12px; background:#0f1217; border:1px solid var(--border); border-radius:12px}
-  .item input{accent-color:var(--accent)}
-  .modal .footer{display:flex; gap:10px; padding:14px 16px; border-top:1px solid var(--border); justify-content:flex-end}
-  /* Toast */
-  .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#0f1217; color:var(--text); padding:10px 14px; border:1px solid var(--border); border-radius:999px; opacity:0; transition:.2s; z-index:60}
+  .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#fff; color:var(--text); padding:10px 14px; border:1px solid var(--border); border-radius:999px; opacity:0; transition:.2s; z-index:60}
   .toast.show{opacity:1}
-  /* Helper badge */
   .info{margin-top:6px; font-size:12px; color:var(--muted)}
 </style>
 </head>
 <body>
-  <!-- Topbar -->
   <header class="topbar card">
     <div class="logo" aria-label="direito.love">
       <img src="icons/logo.png" alt="direito.love" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'">
@@ -120,9 +78,7 @@
     </div>
   </header>
 
-  <!-- Layout -->
   <div class="wrap">
-    <!-- Builder -->
     <main class="builder card" id="builder" aria-labelledby="titulo-builder">
       <h2 id="titulo-builder" style="margin:2px 0 8px">Criador de Prompts — Estudantes de Direito</h2>
 
@@ -139,7 +95,6 @@
       <div class="info">Dica: a <strong>ordem que você seleciona</strong> os chips define a sequência das sessões no prompt.</div>
     </main>
 
-    <!-- Resultado (lateral compacta no desktop) -->
     <aside class="aside card">
       <h3>Resultado</h3>
       <p class="muted">O prompt completo aparece aqui após você clicar em <em>Criar Prompt</em>.</p>
@@ -147,29 +102,9 @@
       <div class="actions" style="margin-top:10px">
         <button id="copiar2" class="btn">Copiar</button>
         <button id="compartilhar2" class="btn">Compartilhar</button>
+        <button id="novo2" class="btn">Novo</button>
       </div>
     </aside>
-  </div>
-
-  <!-- Modal -->
-  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="modal">
-      <header>
-        <h4 id="modal-title">Seu prompt foi criado ✅</h4>
-        <button class="x" id="fechar" aria-label="Fechar">×</button>
-      </header>
-      <div class="body">
-        <p class="muted" style="margin-top:0">Veja o que incluímos (checklist):</p>
-        <div class="checklist" id="checklist"></div>
-        <hr style="border:none;border-top:1px solid var(--border); margin:16px 0">
-        <p class="muted">Agora é só copiar e colar na sua IA preferida. O prompt completo já foi colado na área de <strong>Resultado</strong>.</p>
-      </div>
-      <div class="footer">
-        <button class="btn" id="novo">Novo</button>
-        <button class="btn" id="compartilhar">Compartilhar</button>
-        <button class="btn primary" id="copiar">Copiar</button>
-      </div>
-    </div>
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -180,31 +115,14 @@
   const $$ = (s, r=document) => [...r.querySelectorAll(s)];
   const toast = (msg, t=1800)=>{const el=$("#toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"), t);};
 
-  // 20 sessões (chips). A ordem de clique vira a sequência.
   const SESSOES = [
-    "Conceitos e Definições",
-    "Base Legal Essencial",
-    "Jurisprudência Majoritária",
-    "Doutrina Relevante",
-    "Exemplos e Casos Práticos",
-    "Quadro Comparativo",
-    "Questões de Fixação",
-    "Debates, Críticas e Tendências",
-    "Súmulas e Enunciados",
-    "Estrutura de Peça / Modelos",
-    "Checklist de Peça",
-    "Raciocínio Jurídico (passo a passo)",
-    "Mapa Mental",
-    "Flashcards",
-    "Erros Comuns",
-    "Checklist Final de Revisão",
-    "Casos Famosos / Leading Cases",
-    "Atualizações Recentes",
-    "Dicas de Prova (OAB/Concursos)",
-    "Referências Bibliográficas"
+    "Conceitos e Definições","Base Legal Essencial","Jurisprudência Majoritária","Doutrina Relevante",
+    "Exemplos e Casos Práticos","Quadro Comparativo","Questões de Fixação","Debates, Críticas e Tendências",
+    "Súmulas e Enunciados","Estrutura de Peça / Modelos","Checklist de Peça","Raciocínio Jurídico (passo a passo)",
+    "Mapa Mental","Flashcards","Erros Comuns","Checklist Final de Revisão","Casos Famosos / Leading Cases",
+    "Atualizações Recentes","Dicas de Prova (OAB/Concursos)","Referências Bibliográficas"
   ];
 
-  // Template do prompt (personalizável)
   const BASE_PROMPT = `Você deve assumir a persona de uma **equipe de professores especialistas em todas as áreas do Direito brasileiro**, formada também por **pesquisadores de súmulas e jurisprudências**. Todos fazem parte da equipe **direito.love**.
 
 📌 Tema escolhido: [INSERIR TEMA AQUI]
@@ -242,30 +160,20 @@ Ao finalizar todas as sessões solicitadas, conclua sempre com:
 
 💚 direito.love`;
 
-  // Estado
-  const selected = []; // mantém a ordem de seleção
+  const selected = [];
   const chipsBox = $("#chips");
   const temaEl = $("#tema");
   const criarBtn = $("#criar");
   const limparBtn = $("#limpar");
-  const overlay = $("#overlay");
-  const fechar = $("#fechar");
-  const checklist = $("#checklist");
   const saida = $("#saida");
-  const copiar = $("#copiar");
-  const compartilhar = $("#compartilhar");
-  const novo = $("#novo");
   const copiar2 = $("#copiar2");
   const compartilhar2 = $("#compartilhar2");
+  const novo2 = $("#novo2");
 
-  // monta os chips
   SESSOES.forEach((nome, idx)=>{
     const b = document.createElement("button");
-    b.className="chip";
-    b.type="button";
-    b.setAttribute("aria-pressed","false");
-    b.dataset.selected="false";
-    b.dataset.index=String(idx);
+    b.className="chip"; b.type="button"; b.setAttribute("aria-pressed","false");
+    b.dataset.selected="false"; b.dataset.index=String(idx);
     b.innerHTML=`<span class="tick">✔</span><span class="txt">${nome}</span>`;
     b.addEventListener("click", ()=>toggleChip(b, nome));
     chipsBox.appendChild(b);
@@ -274,13 +182,10 @@ Ao finalizar todas as sessões solicitadas, conclua sempre com:
   function toggleChip(btn, nome){
     const sel = btn.dataset.selected==="true";
     if(sel){
-      btn.dataset.selected="false";
-      btn.setAttribute("aria-pressed","false");
-      const i = selected.indexOf(nome);
-      if(i>-1) selected.splice(i,1);
+      btn.dataset.selected="false"; btn.setAttribute("aria-pressed","false");
+      const i = selected.indexOf(nome); if(i>-1) selected.splice(i,1);
     }else{
-      btn.dataset.selected="true";
-      btn.setAttribute("aria-pressed","true");
+      btn.dataset.selected="true"; btn.setAttribute("aria-pressed","true");
       selected.push(nome);
     }
     updateCTA();
@@ -291,82 +196,53 @@ Ao finalizar todas as sessões solicitadas, conclua sempre com:
   }
 
   temaEl.addEventListener("input", updateCTA);
+
   limparBtn.addEventListener("click", ()=>{
-    temaEl.value="";
+    temaEl.value=""; selected.length=0; saida.value="";
     $$(".chip", chipsBox).forEach(c=>{c.dataset.selected="false"; c.setAttribute("aria-pressed","false");});
-    selected.length=0;
-    saida.value="";
-    updateCTA();
-    toast("Limpou tudo.");
+    updateCTA(); toast("Limpou tudo.");
   });
 
   criarBtn.addEventListener("click", ()=>{
     const tema = temaEl.value.trim();
     if(!tema){ toast("Digite um tema."); return; }
     if(!selected.length){ toast("Selecione ao menos 1 sessão."); return; }
-
     const sequencia = selected.join(" → ");
     const prompt = BASE_PROMPT
       .replace("[INSERIR TEMA AQUI]", tema)
       .replace("[INSERIR AQUI A SEQUÊNCIA DE SESSÕES DEFINIDA PELO USUÁRIO]", sequencia);
-
-    // cola o prompt abaixo (lateral / textarea)
     saida.value = prompt;
-
-    // monta checklist no modal
-    checklist.innerHTML="";
-    selected.forEach(s=>{
-      const row=document.createElement("label"); row.className="item";
-      const ck=document.createElement("input"); ck.type="checkbox"; ck.checked=true; ck.disabled=true;
-      const span=document.createElement("span"); span.textContent=s;
-      row.appendChild(ck); row.appendChild(span);
-      checklist.appendChild(row);
-    });
-
-    openModal();
+    toast("Prompt criado!");
+    // foco e rolagem para mostrar o resultado
+    saida.focus(); saida.scrollIntoView({behavior:"smooth", block:"center"});
   });
 
-  function openModal(){ overlay.classList.add("open"); $("#copiar").focus(); }
-  function closeModal(){ overlay.classList.remove("open"); }
-
-  fechar.addEventListener("click", closeModal);
-  overlay.addEventListener("click", (e)=>{ if(e.target===overlay) closeModal(); });
-
   async function copyOut(){
-    try{
-      await navigator.clipboard.writeText(saida.value);
-      toast("Copiado!");
-    }catch(e){ toast("Não consegui copiar automaticamente."); }
+    try{ await navigator.clipboard.writeText(saida.value); toast("Copiado!"); }
+    catch(e){ toast("Não consegui copiar automaticamente."); }
   }
   async function shareOut(){
     const text = saida.value;
     if(navigator.share){
       try{ await navigator.share({title:"Prompt — direito.love", text}); }
-      catch(_){} // usuário pode cancelar
+      catch(_){}
     }else{
       await copyOut();
       toast("Compartilhar não suportado — prompt copiado.");
     }
   }
-
-  copiar.addEventListener("click", copyOut);
-  compartilhar.addEventListener("click", shareOut);
   copiar2.addEventListener("click", copyOut);
   compartilhar2.addEventListener("click", shareOut);
-
-  novo.addEventListener("click", ()=>{
-    closeModal();
+  novo2.addEventListener("click", ()=>{
     temaEl.value=""; selected.length=0; saida.value="";
     $$(".chip", chipsBox).forEach(c=>{c.dataset.selected="false"; c.setAttribute("aria-pressed","false");});
-    updateCTA();
-    temaEl.focus();
+    updateCTA(); temaEl.focus(); window.scrollTo({top:0, behavior:"smooth"});
   });
 
-  // acessibilidade: Enter em tema cria prompt (se válido)
+  // Enter no tema aciona criar (se válido)
   temaEl.addEventListener("keydown", (e)=>{
     if(e.key==="Enter" && !criarBtn.disabled){ e.preventDefault(); criarBtn.click(); }
   });
-
 })();
 </script>
 </body>
