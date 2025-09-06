@@ -7,97 +7,103 @@
 <meta name="theme-color" content="#FFFFFF" />
 <style>
   :root{
-    /* PALETA (anexo): 575A6C, B4C540, E0E2D2, 3686C9 + fundo claro */
-    --bg:#ffffff;         /* fundo */
-    --surface:#E0E2D2;    /* cartões */
-    --text:#303646;       /* texto principal (escuro neutro) */
-    --muted:#575A6C;      /* texto secundário (da paleta) */
-    --border:#d6dbca;     /* bordas sutis sobre o surface */
-    --accent:#3686C9;     /* azul (ação primaria) */
-    --accent-2:#B4C540;   /* verde-lima (detalhes) */
+    /* PALETA (anexo: amarelo+azuis) */
+    --bg:#ffffff;        /* fundo claro */
+    --text:#0E1116;      /* texto principal */
+    --muted:#2F3A56;     /* azul acinzentado p/ subtítulos */
+    --surface:#F5F8FF;   /* cartões bem claros (leve azulado) */
+    --border:#E3E8F2;    /* borda suave */
 
-    --chip:#ffffff;             /* chip base (claro) */
-    --chip-hover:#f6f7f2;       /* hover discreto */
-    --chip-on:#EAF3FB;          /* chip selecionado (azul claro) */
-    --chip-on-border:#BFD9F1;
+    --blue:#2F55C7;      /*  azul royal (botão primário) */
+    --navy:#0A2D6F;      /*  azul marinho (detalhe) */
+    --sky:#3FA2E5;       /*  azul claro (realce) */
+    --yellow:#F2CA2C;    /*  amarelo (secundário) */
+    --cream:#FFF3DE;     /*  creme (apoio/hover) */
 
+    /* UI */
     --radius:14px;
-    --radius-chip:10px;         /* menos arredondado */
-    --shadow:0 6px 22px rgba(0,0,0,.08);
-    --max-aside:820px;          /* lateral alvo ~800px */
+    --radius-chip:8px;   /* menos arredondado */
+    --shadow:0 6px 22px rgba(0,0,0,.06);
+    --max-aside:820px;
     --gap:16px;
     --font:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,system-ui,sans-serif;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
-  body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.5 var(--font);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+  body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.5 var(--font)}
 
-  /* Topbar */
+  /* Topbar mais estreito + logo maior */
   .topbar{
     position:sticky; top:0; z-index:30;
     background:color-mix(in oklab, var(--surface) 92%, white);
     border-bottom:1px solid var(--border);
-    display:grid; place-items:center; padding:10px 16px;
+    display:grid; place-items:center; padding:6px 12px; /* mais estreito */
   }
-  .topbar .logo{display:flex; align-items:center; gap:12px}
-  .topbar img{height:clamp(36px, 5vw, 56px); width:auto; display:block} /* LOGO MAIOR */
-  .topbar .brand{font-weight:700; color:var(--muted); letter-spacing:.2px}
+  .topbar .logo{display:flex; align-items:center; gap:10px}
+  .topbar img{height:clamp(44px, 6vw, 64px); width:auto; display:block} /* logo maior */
 
   /* Layout */
-  .wrap{display:grid; gap:var(--gap); grid-template-columns:1fr; padding:20px; max-width:1400px; margin:0 auto;}
+  .wrap{display:grid; gap:var(--gap); grid-template-columns:1fr; padding:16px; max-width:1400px; margin:0 auto;}
   @media (min-width:1100px){ .wrap{grid-template-columns:1fr minmax(680px,var(--max-aside)); align-items:start;} }
   .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);}
-  .builder{padding:20px}
-  .section-title{font-size:14px; color:var(--muted); margin:8px 0 6px}
-  label[for=tema]{display:block; font-size:14px; color:var(--muted); margin:4px 0 6px}
+  .builder{padding:18px}
+  .builder h2{margin:0 0 10px; font-size:20px; font-weight:700;} /* título menor */
+  .section-title{font-size:13px; color:var(--muted); margin:8px 0 6px}
+  label[for=tema]{display:block; font-size:13px; color:var(--muted); margin:4px 0 6px}
   #tema{
     width:100%; border:1px solid var(--border); background:#fff; color:var(--text);
-    padding:12px 14px; border-radius:12px; font-size:16px; outline:none;
+    padding:10px 12px; border-radius:12px; font-size:15px; outline:none;
   }
-  #tema::placeholder{color:#8a91a0}
+  #tema::placeholder{color:#91A3C1}
 
-  /* Chips compactos e discretos */
+  /* Chips menores + sem estourar texto (até 2 linhas) */
   .chips{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px}
   @media (min-width:640px){ .chips{grid-template-columns:repeat(3,minmax(0,1fr));} }
-  @media (min-width:1100px){ .chips{grid-template-columns:repeat(4,minmax(0,1fr));} }
+  @media (min-width:1100px){ .chips{grid-template-columns:repeat(5,minmax(0,1fr));} } /* mais colunas no desktop */
   .chip{
-    border:1px solid var(--border); background:var(--chip); color:var(--text);
-    border-radius:var(--radius-chip); padding:8px 10px; font-size:12.5px; line-height:1.2; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; gap:6px; transition:.15s ease;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; /* evita texto estourar */
+    border:1px solid var(--border); background:#fff; color:var(--text);
+    border-radius:var(--radius-chip); padding:7px 10px; font-size:12px; line-height:1.25; cursor:pointer;
+    display:block; text-align:center; transition:.15s ease;
+    overflow:hidden; /* clamp 2 linhas */
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
   }
-  .chip:hover{background:var(--chip-hover)}
+  .chip:hover{background:var(--cream)}
   .chip[data-selected="true"]{
-    background:var(--chip-on); border-color:var(--chip-on-border);
-    box-shadow: inset 0 0 0 1px rgba(54,134,201,.20);
+    background:color-mix(in oklab, var(--sky) 12%, white);
+    border-color:#BFD9F1; box-shadow: inset 0 0 0 1px rgba(63,162,229,.18);
   }
-  .chip .tick{display:none}
-  .chip[data-selected="true"] .tick{display:inline; color:var(--accent)}
 
   /* Ações */
-  .actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
+  .actions{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
   .btn{
     appearance:none; border:1px solid var(--border); background:#fff; color:var(--text);
     padding:10px 14px; border-radius:12px; font-size:14px; cursor:pointer; transition:.15s ease;
   }
   .btn:hover{box-shadow:var(--shadow)}
-  .btn.primary{background:var(--accent); color:#fff; border:none; font-weight:700} /* azul sólido p/ contraste */
+  .btn.primary{background:var(--blue); color:#fff; border:none; font-weight:700}
   .btn:disabled{opacity:.45; cursor:not-allowed; box-shadow:none}
 
   /* Lateral (resultado) */
-  .aside{position:sticky; top:74px; padding:16px}
-  .aside h3{margin:0 0 10px}
-  textarea#saida{
-    width:100%; min-height:60vh; resize:vertical; padding:12px 14px; border-radius:12px;
-    border:1px solid var(--border); background:#fff; color:var(--text);
-    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:14px;
+  .aside{position:sticky; top:64px; padding:14px}
+  /* slot de anúncio acima do prompt */
+  .ad{display:flex; justify-content:center; align-items:center; margin:0 0 10px 0}
+  .ad .ad-box{
+    background:#fff; border:1px dashed var(--border); color:var(--muted);
+    display:flex; align-items:center; justify-content:center; font-size:13px; border-radius:12px;
+    width:300px; height:300px; /* mobile default */
   }
-  .muted{color:var(--muted); font-size:13px}
+  @media (min-width:700px){ .ad .ad-box{ width:468px; height:60px; } }     /* tablet */
+  @media (min-width:1100px){ .ad .ad-box{ width:728px; height:90px; } }    /* desktop */
 
-  /* Toast */
+  textarea#saida{
+    width:100%; min-height:38vh; /* mais baixo */
+    resize:vertical; padding:10px 12px; border-radius:12px;
+    border:1px solid var(--border); background:#fff; color:var(--text);
+    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:13.5px;
+  }
+
   .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#fff; color:var(--text); padding:10px 14px; border:1px solid var(--border); border-radius:999px; opacity:0; transition:.2s; z-index:60}
   .toast.show{opacity:1}
-
   .info{margin-top:6px; font-size:12px; color:var(--muted)}
 </style>
 </head>
@@ -105,16 +111,14 @@
   <!-- Topbar -->
   <header class="topbar card">
     <div class="logo" aria-label="direito.love">
-      <img src="icons/logo.png" alt="direito.love" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'">
-      <span class="brand" style="display:none">direito.love</span>
+      <img src="icons/logo.png" alt="direito.love">
     </div>
   </header>
 
-  <!-- Layout -->
   <div class="wrap">
     <!-- Builder -->
     <main class="builder card" id="builder" aria-labelledby="titulo-builder">
-      <h2 id="titulo-builder" style="margin:2px 0 8px">Criador de Prompts — Estudantes de Direito</h2>
+      <h2 id="titulo-builder">Criador de Prompts — Estudantes de Direito</h2>
 
       <label for="tema">Tema</label>
       <input id="tema" maxlength="120" placeholder="Digite aqui o tema que deseja estudar..." autocomplete="off" />
@@ -129,10 +133,24 @@
       <div class="info">A <strong>ordem dos cliques</strong> define a sequência das sessões no prompt.</div>
     </main>
 
-    <!-- Resultado (lateral ~800px no desktop) -->
+    <!-- Lateral (sem título/descrição) -->
     <aside class="aside card">
-      <h3>Resultado</h3>
-      <p class="muted">O prompt completo aparece aqui após você clicar em <em>Criar Prompt</em>.</p>
+      <!-- Anúncio responsivo (placeholder). Substitua pela tag AdSense INS se quiser -->
+      <div class="ad">
+        <div class="ad-box">
+          <!-- Exemplo AdSense (substitua pelo seu código):
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXX"
+               data-ad-slot="YYYY"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+          -->
+          Anúncio • 300×300 / 468×60 / 728×90 (auto)
+        </div>
+      </div>
+
       <textarea id="saida" readonly placeholder="(vazio)"></textarea>
       <div class="actions" style="margin-top:10px">
         <button id="copiar2" class="btn">Copiar</button>
@@ -150,7 +168,6 @@
   const $$ = (s, r=document) => [...r.querySelectorAll(s)];
   const toast = (msg, t=1800)=>{const el=$("#toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"), t);};
 
-  // 20 SESSÕES — título completo vai no title p/ hover, chip mostra com reticências se precisar
   const SESSOES = [
     "Conceitos e Definições",
     "Base Legal Essencial",
@@ -221,13 +238,13 @@ Ao finalizar todas as sessões solicitadas, conclua sempre com:
   const compartilhar2 = $("#compartilhar2");
   const novo2 = $("#novo2");
 
-  // Monta chips compactos
+  // Monta chips (com clamp de 2 linhas)
   SESSOES.forEach((nome, idx)=>{
     const b = document.createElement("button");
     b.className="chip"; b.type="button"; b.setAttribute("aria-pressed","false");
     b.dataset.selected="false"; b.dataset.index=String(idx);
-    b.title = nome; // hover mostra o nome completo
-    b.innerHTML=`<span class="tick">✔</span><span class="txt">${nome}</span>`;
+    b.title = nome;
+    b.textContent = nome;
     b.addEventListener("click", ()=>toggleChip(b, nome));
     chipsBox.appendChild(b);
   });
