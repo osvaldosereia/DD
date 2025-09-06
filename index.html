@@ -4,105 +4,92 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>direito.love — Criador de Prompts</title>
-  <meta name="theme-color" content="#001840" />
+  <meta name="theme-color" content="#F5C400" />
 
   <!-- Favicon -->
-  <link rel="icon" href="favicon.ico" type="image/ico" />
-  <link rel="apple-touch-icon" href="favicon.ico" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="favicon-180.png" />
 
   <style>
     :root{
-      --bg:#FFFDF0;          /* fundo claro */
-      --surface:#ffffff;     
-      --text:#001840;        /* azul profundo */
-      --muted:#6b7280;
+      --bg:#FFFDF0;
+      --surface:#ffffff;
+      --text:#001840;       /* azul profundo */
       --border:#e5e7eb;
 
-      --primary:#102A71;     /* azul médio */
-      --highlight:#F5C400;   /* amarelo vibrante */
+      --primary:#102A71;    /* azul médio */
+      --highlight:#F5C400;  /* amarelo vibrante */
       --highlight-light:#FFDC5F;
 
-      --radius:12px;
-      --shadow:0 8px 24px rgba(0,0,0,.06);
+      --radius:10px;
+      --shadow:0 4px 16px rgba(0,0,0,.05);
       --gap:16px;
 
-      --aside-width:440px;
+      --aside-width:420px;
       --prompt-width:400px;
       --font:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,system-ui,sans-serif;
     }
 
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0; background:var(--bg); color:var(--text);
-      font:400 16px/1.5 var(--font); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      font:400 15px/1.4 var(--font); -webkit-font-smoothing:antialiased;
     }
 
+    /* Topbar amarelo */
     .topbar{
       position:sticky; top:0; z-index:30;
-      background:var(--primary); color:#fff;
-      border-bottom:2px solid var(--highlight);
-      display:grid; place-items:center; padding:8px 10px;
+      background:var(--highlight); color:var(--text);
+      border-bottom:2px solid var(--primary);
+      display:flex; justify-content:center; align-items:center;
+      padding:8px 10px;
     }
-    .topbar img{height:clamp(28px,4.5vw,40px); width:auto;}
+    .topbar img{height:32px; width:auto;}
 
     .wrap{
       display:grid; gap:var(--gap);
-      grid-template-columns:1fr; padding:18px; max-width:1400px; margin:0 auto;
+      grid-template-columns:1fr;
+      padding:18px; max-width:1400px; margin:0 auto;
     }
     @media (min-width:1100px){
       .wrap{grid-template-columns:minmax(0,1fr) var(--aside-width); align-items:start;}
     }
 
-    .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);}
+    .card{background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); box-shadow:var(--shadow);}
 
-    .builder{padding:16px 18px}
+    .builder{padding:18px}
     .builder h2{margin:0 0 12px; font-size:20px; font-weight:700; color:var(--primary);}
     label[for=tema], .section-title{font-size:14px; color:var(--primary); margin:8px 0}
     #tema{
       width:100%; border:1px solid var(--border); background:#fff; color:var(--text);
-      padding:10px 12px; border-radius:10px; font-size:15px; outline:none;
+      padding:10px 12px; border-radius:8px; font-size:15px; outline:none;
     }
     #tema::placeholder{color:#9aa3af}
 
-    /* Lista de sessões */
+    /* Lista com checkboxes */
     .sessao-lista{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:8px;
-      margin:18px 0;
-      list-style:disc;
-      padding-left:20px;
+      display:grid; grid-template-columns:1fr; gap:6px;
+      margin:12px 0; padding:0; list-style:none;
     }
     @media(min-width:900px){
-      .sessao-lista{
-        grid-template-columns:1fr 1fr;
-        column-gap:40px;
-      }
-      .sessao-lista li:nth-child(odd){
-        border-right:1px solid var(--border);
-        padding-right:20px;
-      }
-      .sessao-lista li:nth-child(even){
-        padding-left:20px;
-      }
+      .sessao-lista{grid-template-columns:1fr 1fr; column-gap:20px;}
     }
     .sessao-lista li{
-      margin-bottom:8px;
-      cursor:pointer;
-      transition:.2s;
+      display:flex; align-items:center; gap:6px;
+      padding:2px 0; font-size:14px;
     }
-    .sessao-lista li:hover{color:var(--highlight);}
+    .sessao-lista input[type=checkbox]{accent-color:var(--primary); cursor:pointer;}
+    .sessao-lista label{cursor:pointer;}
 
     .actions{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
     .btn{
-      appearance:none; border:1px solid var(--border); background:var(--highlight); color:#000;
-      padding:10px 14px; border-radius:10px; font-size:14px; cursor:pointer; transition:.15s;
+      appearance:none; border:none; background:var(--highlight); color:#000;
+      padding:9px 14px; border-radius:8px; font-size:14px; cursor:pointer; transition:.15s;
     }
     .btn:hover{background:var(--highlight-light);}
-    .btn.primary{background:var(--primary); color:#fff; border:none; font-weight:700}
-    .btn.primary:hover{background:var(--highlight); color:#000;}
-    .btn:disabled{opacity:.5; cursor:not-allowed; box-shadow:none}
+    .btn.primary{background:var(--primary); color:#fff; font-weight:700}
+    .btn.primary:hover{background:#264399;}
 
     .aside{position:sticky; top:56px; padding:12px}
     .stack{max-width:var(--prompt-width); margin:0 auto;}
@@ -111,72 +98,73 @@
       width:min(var(--prompt-width), 100%);
       aspect-ratio:400/180;
       border:1px dashed var(--border); border-radius:10px;
-      background:#fff; color:var(--muted); display:flex; align-items:center; justify-content:center; font-size:13px;
+      background:#fff; color:var(--muted); display:flex;
+      align-items:center; justify-content:center; font-size:13px;
     }
 
     textarea#saida{
       width:min(var(--prompt-width), 100%);
-      min-height:32vh;
-      resize:vertical; padding:10px 12px; border-radius:10px;
+      min-height:30vh;
+      resize:vertical; padding:10px 12px; border-radius:8px;
       border:1px solid var(--border); background:#fff; color:var(--text);
-      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; font-size:13.5px;
+      font-family:ui-monospace,Menlo,Consolas,monospace; font-size:13.5px;
       display:block; margin:0 auto;
     }
 
-    .muted{color:var(--muted); font-size:12.5px}
-    .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#111; color:#fff; padding:8px 12px; border-radius:999px; opacity:0; transition:.2s; z-index:60}
+    .muted{color:#666; font-size:12.5px}
+    .toast{position:fixed; left:50%; transform:translateX(-50%);
+      bottom:18px; background:#111; color:#fff;
+      padding:8px 12px; border-radius:999px; opacity:0;
+      transition:.2s; z-index:60}
     .toast.show{opacity:1}
-    .info{margin-top:6px; font-size:12px; color:var(--muted)}
+    .info{margin-top:6px; font-size:12px; color:#666}
   </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="logo" aria-label="direito.love">
-      <img src="icons/logo.png" alt="direito.love">
-    </div>
+    <div class="logo"><img src="icons/logo.png" alt="direito.love"></div>
   </header>
 
   <div class="wrap">
-    <main class="builder card" id="builder" aria-labelledby="titulo-builder">
-      <h2 id="titulo-builder">Criador de Prompts — Estudantes de Direito</h2>
+    <main class="builder card">
+      <h2>Criador de Prompts — Estudantes de Direito</h2>
       <label for="tema">Tema</label>
-      <input id="tema" maxlength="120" placeholder="Digite aqui o tema que deseja estudar..." autocomplete="off" />
-      <div class="section-title">Selecione como quer estudar:</div>
+      <input id="tema" maxlength="120" placeholder="Digite aqui o tema..." autocomplete="off" />
 
-      <!-- Lista no lugar dos chips -->
+      <div class="section-title">Selecione como quer estudar:</div>
       <ul class="sessao-lista" id="sessao-lista">
-        <li>Conceitos e Definições</li>
-        <li>Base Legal Essencial</li>
-        <li>Jurisprudência Majoritária</li>
-        <li>Doutrina Relevante</li>
-        <li>Exemplos e Casos Práticos</li>
-        <li>Quadro Comparativo</li>
-        <li>Questões de Fixação</li>
-        <li>Debates, Críticas e Tendências</li>
-        <li>Súmulas e Enunciados</li>
-        <li>Estrutura de Peça / Modelos</li>
-        <li>Checklist de Peça</li>
-        <li>Raciocínio Jurídico (passo a passo)</li>
-        <li>Mapa Mental</li>
-        <li>Flashcards</li>
-        <li>Erros Comuns</li>
-        <li>Checklist Final de Revisão</li>
-        <li>Casos Famosos / Leading Cases</li>
-        <li>Atualizações Recentes</li>
-        <li>Dicas de Prova (OAB/Concursos)</li>
-        <li>Referências Bibliográficas</li>
+        <li><input type="checkbox" id="s1"><label for="s1">Conceitos e Definições</label></li>
+        <li><input type="checkbox" id="s2"><label for="s2">Base Legal Essencial</label></li>
+        <li><input type="checkbox" id="s3"><label for="s3">Jurisprudência Majoritária</label></li>
+        <li><input type="checkbox" id="s4"><label for="s4">Doutrina Relevante</label></li>
+        <li><input type="checkbox" id="s5"><label for="s5">Exemplos e Casos Práticos</label></li>
+        <li><input type="checkbox" id="s6"><label for="s6">Quadro Comparativo</label></li>
+        <li><input type="checkbox" id="s7"><label for="s7">Questões de Fixação</label></li>
+        <li><input type="checkbox" id="s8"><label for="s8">Debates, Críticas e Tendências</label></li>
+        <li><input type="checkbox" id="s9"><label for="s9">Súmulas e Enunciados</label></li>
+        <li><input type="checkbox" id="s10"><label for="s10">Estrutura de Peça / Modelos</label></li>
+        <li><input type="checkbox" id="s11"><label for="s11">Checklist de Peça</label></li>
+        <li><input type="checkbox" id="s12"><label for="s12">Raciocínio Jurídico (passo a passo)</label></li>
+        <li><input type="checkbox" id="s13"><label for="s13">Mapa Mental</label></li>
+        <li><input type="checkbox" id="s14"><label for="s14">Flashcards</label></li>
+        <li><input type="checkbox" id="s15"><label for="s15">Erros Comuns</label></li>
+        <li><input type="checkbox" id="s16"><label for="s16">Checklist Final de Revisão</label></li>
+        <li><input type="checkbox" id="s17"><label for="s17">Casos Famosos / Leading Cases</label></li>
+        <li><input type="checkbox" id="s18"><label for="s18">Atualizações Recentes</label></li>
+        <li><input type="checkbox" id="s19"><label for="s19">Dicas de Prova (OAB/Concursos)</label></li>
+        <li><input type="checkbox" id="s20"><label for="s20">Referências Bibliográficas</label></li>
       </ul>
 
       <div class="actions">
         <button id="criar" class="btn primary" disabled>Criar Prompt</button>
-        <button id="limpar" class="btn" title="Limpar seleções">Limpar</button>
+        <button id="limpar" class="btn">Limpar</button>
       </div>
-      <div class="info">A <strong>ordem dos cliques</strong> define a sequência das sessões no prompt.</div>
+      <div class="info">Selecione as sessões que deseja incluir no prompt.</div>
     </main>
 
     <aside class="aside card">
       <div class="stack">
-        <div class="ad"><div class="box">Anúncio • 400×180 (auto scale)</div></div>
+        <div class="ad"><div class="box">Anúncio • 400×180</div></div>
         <textarea id="saida" readonly placeholder="(vazio)"></textarea>
         <div class="actions" style="margin:10px auto 0; width:min(var(--prompt-width),100%);">
           <button id="copiar2" class="btn">Copiar</button>
@@ -188,5 +176,49 @@
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  const $ = (s,r=document)=>r.querySelector(s);
+  const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+  const toast = (msg,t=1600)=>{const el=$("#toast");el.textContent=msg;
+    el.classList.add("show");setTimeout(()=>el.classList.remove("show"),t);};
+
+  const BASE_PROMPT = `Você deve assumir a persona de uma **equipe de professores especialistas em todas as áreas do Direito brasileiro**, formada também por **pesquisadores de súmulas e jurisprudências**. Todos fazem parte da equipe **direito.love**.
+
+📌 Tema escolhido: [INSERIR TEMA AQUI]
+📌 Sessões a serem seguidas: [INSERIR AQUI A SEQUÊNCIA DE SESSÕES DEFINIDA PELO USUÁRIO]
+
+---`;
+
+  const temaEl=$("#tema"), criarBtn=$("#criar"), limparBtn=$("#limpar"), saida=$("#saida");
+
+  function updateCTA(){
+    const checked=[...$$(".sessao-lista input:checked")];
+    criarBtn.disabled=!(temaEl.value.trim() && checked.length);
+  }
+
+  temaEl.addEventListener("input",updateCTA);
+  $$(".sessao-lista input").forEach(cb=>cb.addEventListener("change",updateCTA));
+
+  criarBtn.addEventListener("click",()=>{
+    const tema=temaEl.value.trim();
+    const checked=[...$$(".sessao-lista input:checked")].map(cb=>cb.nextElementSibling.textContent);
+    if(!tema){toast("Digite um tema.");return;}
+    if(!checked.length){toast("Selecione ao menos 1 sessão.");return;}
+    const prompt=BASE_PROMPT
+      .replace("[INSERIR TEMA AQUI]",tema)
+      .replace("[INSERIR AQUI A SEQUÊNCIA DE SESSÕES DEFINIDA PELO USUÁRIO]",checked.join(" → "));
+    saida.value=prompt;
+    toast("Prompt criado!");
+  });
+
+  limparBtn.addEventListener("click",()=>{
+    temaEl.value="";saida.value="";
+    $$(".sessao-lista input").forEach(cb=>cb.checked=false);
+    updateCTA();toast("Tudo limpo.");
+  });
+})();
+</script>
 </body>
 </html>
