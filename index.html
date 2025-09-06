@@ -4,30 +4,30 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>direito.love — Criador de Prompts</title>
-  <meta name="theme-color" content="#FFFFFF" />
+  <meta name="theme-color" content="#001840" />
 
   <!-- Favicon -->
-  <link rel="icon" href="icons/favicon.png" type="image/png" />
-  <link rel="apple-touch-icon" href="icons/favicon-180.png" />
+  <link rel="icon" href="favicon.ico" type="image/ico" />
+  <link rel="apple-touch-icon" href="favicon.ico" />
 
   <style>
     :root{
-      --bg:#f7f7f9;
-      --surface:#ffffff;
-      --text:#111113;
+      --bg:#FFFDF0;          /* fundo claro */
+      --surface:#ffffff;     
+      --text:#001840;        /* azul profundo */
       --muted:#6b7280;
       --border:#e5e7eb;
 
-      --primary:#111113;
-      --primary-ink:#ffffff;
+      --primary:#102A71;     /* azul médio */
+      --highlight:#F5C400;   /* amarelo vibrante */
+      --highlight-light:#FFDC5F;
 
       --radius:12px;
-      --radius-chip:8px;
       --shadow:0 8px 24px rgba(0,0,0,.06);
       --gap:16px;
 
-      --aside-width:440px;   /* coluna direita mais estreita */
-      --prompt-width:400px;  /* banner e textarea com 400px */
+      --aside-width:440px;
+      --prompt-width:400px;
       --font:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,system-ui,sans-serif;
     }
 
@@ -40,12 +40,11 @@
 
     .topbar{
       position:sticky; top:0; z-index:30;
-      background:var(--surface);
-      border-bottom:1px solid var(--border);
-      display:grid; place-items:center; padding:6px 10px;
+      background:var(--primary); color:#fff;
+      border-bottom:2px solid var(--highlight);
+      display:grid; place-items:center; padding:8px 10px;
     }
-    .topbar .logo{display:flex; align-items:center; gap:8px}
-    .topbar img{height:clamp(28px,4.5vw,40px); width:auto; display:block}
+    .topbar img{height:clamp(28px,4.5vw,40px); width:auto;}
 
     .wrap{
       display:grid; gap:var(--gap);
@@ -58,41 +57,56 @@
     .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);}
 
     .builder{padding:16px 18px}
-    .builder h2{margin:0 0 8px; font-size:18px; font-weight:700;}
-    label[for=tema], .section-title{font-size:13px; color:var(--muted); margin:6px 0}
+    .builder h2{margin:0 0 12px; font-size:20px; font-weight:700; color:var(--primary);}
+    label[for=tema], .section-title{font-size:14px; color:var(--primary); margin:8px 0}
     #tema{
       width:100%; border:1px solid var(--border); background:#fff; color:var(--text);
       padding:10px 12px; border-radius:10px; font-size:15px; outline:none;
     }
     #tema::placeholder{color:#9aa3af}
 
-    .chips{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:8px}
-    @media (min-width:640px){ .chips{grid-template-columns:repeat(3,minmax(0,1fr));} }
-    @media (min-width:1200px){ .chips{grid-template-columns:repeat(5,minmax(0,1fr));} }
-    .chip{
-      background:#fff; border:1px solid var(--border); color:var(--text);
-      border-radius:var(--radius-chip); padding:7px 10px; font-size:12px; line-height:1.25; cursor:pointer;
-      transition:.15s ease; text-align:center;
-      display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+    /* Lista de sessões */
+    .sessao-lista{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:8px;
+      margin:18px 0;
+      list-style:disc;
+      padding-left:20px;
     }
-    .chip:hover{background:#fafafa}
-    .chip[data-selected="true"]{
-      background:#f3f4f6; border-color:#d1d5db; box-shadow:inset 0 0 0 1px #e5e7eb;
+    @media(min-width:900px){
+      .sessao-lista{
+        grid-template-columns:1fr 1fr;
+        column-gap:40px;
+      }
+      .sessao-lista li:nth-child(odd){
+        border-right:1px solid var(--border);
+        padding-right:20px;
+      }
+      .sessao-lista li:nth-child(even){
+        padding-left:20px;
+      }
     }
+    .sessao-lista li{
+      margin-bottom:8px;
+      cursor:pointer;
+      transition:.2s;
+    }
+    .sessao-lista li:hover{color:var(--highlight);}
 
     .actions{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
     .btn{
-      appearance:none; border:1px solid var(--border); background:#fff; color:var(--text);
+      appearance:none; border:1px solid var(--border); background:var(--highlight); color:#000;
       padding:10px 14px; border-radius:10px; font-size:14px; cursor:pointer; transition:.15s;
     }
-    .btn:hover{box-shadow:var(--shadow)}
-    .btn.primary{background:var(--primary); color:var(--primary-ink); border-color:var(--primary); font-weight:700}
+    .btn:hover{background:var(--highlight-light);}
+    .btn.primary{background:var(--primary); color:#fff; border:none; font-weight:700}
+    .btn.primary:hover{background:var(--highlight); color:#000;}
     .btn:disabled{opacity:.5; cursor:not-allowed; box-shadow:none}
 
     .aside{position:sticky; top:56px; padding:12px}
     .stack{max-width:var(--prompt-width); margin:0 auto;}
 
-    .ad{display:flex; justify-content:center; align-items:center; margin:0 0 10px 0}
     .ad .box{
       width:min(var(--prompt-width), 100%);
       aspect-ratio:400/180;
@@ -128,7 +142,31 @@
       <label for="tema">Tema</label>
       <input id="tema" maxlength="120" placeholder="Digite aqui o tema que deseja estudar..." autocomplete="off" />
       <div class="section-title">Selecione como quer estudar:</div>
-      <div class="chips" id="chips" aria-label="Sessões disponíveis"></div>
+
+      <!-- Lista no lugar dos chips -->
+      <ul class="sessao-lista" id="sessao-lista">
+        <li>Conceitos e Definições</li>
+        <li>Base Legal Essencial</li>
+        <li>Jurisprudência Majoritária</li>
+        <li>Doutrina Relevante</li>
+        <li>Exemplos e Casos Práticos</li>
+        <li>Quadro Comparativo</li>
+        <li>Questões de Fixação</li>
+        <li>Debates, Críticas e Tendências</li>
+        <li>Súmulas e Enunciados</li>
+        <li>Estrutura de Peça / Modelos</li>
+        <li>Checklist de Peça</li>
+        <li>Raciocínio Jurídico (passo a passo)</li>
+        <li>Mapa Mental</li>
+        <li>Flashcards</li>
+        <li>Erros Comuns</li>
+        <li>Checklist Final de Revisão</li>
+        <li>Casos Famosos / Leading Cases</li>
+        <li>Atualizações Recentes</li>
+        <li>Dicas de Prova (OAB/Concursos)</li>
+        <li>Referências Bibliográficas</li>
+      </ul>
+
       <div class="actions">
         <button id="criar" class="btn primary" disabled>Criar Prompt</button>
         <button id="limpar" class="btn" title="Limpar seleções">Limpar</button>
@@ -150,141 +188,5 @@
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-<script>
-(function(){
-  const $ = (s, r=document) => r.querySelector(s);
-  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
-  const toast = (msg, t=1600)=>{const el=$("#toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"), t);};
-
-  const SESSOES = [
-    "Conceitos e Definições","Base Legal Essencial","Jurisprudência Majoritária","Doutrina Relevante",
-    "Exemplos e Casos Práticos","Quadro Comparativo","Questões de Fixação","Debates, Críticas e Tendências",
-    "Súmulas e Enunciados","Estrutura de Peça / Modelos","Checklist de Peça","Raciocínio Jurídico (passo a passo)",
-    "Mapa Mental","Flashcards","Erros Comuns","Checklist Final de Revisão",
-    "Casos Famosos / Leading Cases","Atualizações Recentes","Dicas de Prova (OAB/Concursos)","Referências Bibliográficas"
-  ];
-
-  const BASE_PROMPT = `Você deve assumir a persona de uma **equipe de professores especialistas em todas as áreas do Direito brasileiro**, formada também por **pesquisadores de súmulas e jurisprudências**. Todos fazem parte da equipe **direito.love**.
-
-📌 Tema escolhido: [INSERIR TEMA AQUI]
-📌 Sessões a serem seguidas: [INSERIR AQUI A SEQUÊNCIA DE SESSÕES DEFINIDA PELO USUÁRIO]
-
----
-
-### Regras obrigatórias de escrita:
-
-1. **Seguir exatamente a sequência de sessões definida pelo usuário.**
-   - Nenhuma sessão pode ser omitida.
-   - Cada sessão deve ser aberta com um **título claro** e, se necessário, subtítulos.
-
-2. **Entrega por blocos:**
-   - Apresentar no máximo **3 sessões por vez**.
-   - Ao final de cada bloco, perguntar:
-     ➡️ “Deseja que eu continue para as próximas sessões?”
-   - Só prossiga após autorização.
-
-3. **Formatação:**
-   - Pular **duas linhas** antes de cada nova sessão.
-   - Usar uma **linha separadora (---)** para dividir os blocos.
-   - Estruturar o conteúdo em **parágrafos curtos e claros**.
-   - Quando houver quadro comparativo, **organizar em tabela textual simples**.
-   - Quando houver questões, numerá-las (1, 2, 3…) e apresentar alternativas (A, B, C, D, E), logo após incluir gabarito comentado.
-   - Base legal deve vir unicamente do Planalto Governo.
-   - Evite números de julgados; apresente apenas entendimentos.
-   - A busca deve ser feita na web.
-
-4. **Linguagem:**
-   - Clara, simples e didática, mas mantendo rigor jurídico.
-
----
-
-### Encerramento:
-Ao finalizar todas as sessões solicitadas, conclua sempre com:
-
-💚 direito.love`;
-
-  const selected = [];
-  const chipsBox = $("#chips");
-  const temaEl = $("#tema");
-  const criarBtn = $("#criar");
-  const limparBtn = $("#limpar");
-  const saida = $("#saida");
-  const copiar2 = $("#copiar2");
-  const compartilhar2 = $("#compartilhar2");
-  const novo2 = $("#novo2");
-
-  SESSOES.forEach((nome, idx)=>{
-    const b = document.createElement("button");
-    b.className="chip"; b.type="button"; b.setAttribute("aria-pressed","false");
-    b.dataset.selected="false"; b.dataset.index=String(idx);
-    b.title = nome;
-    b.textContent = nome;
-    b.addEventListener("click", ()=>toggleChip(b, nome));
-    chipsBox.appendChild(b);
-  });
-
-  function toggleChip(btn, nome){
-    const sel = btn.dataset.selected==="true";
-    if(sel){
-      btn.dataset.selected="false"; btn.setAttribute("aria-pressed","false");
-      const i = selected.indexOf(nome); if(i>-1) selected.splice(i,1);
-    }else{
-      btn.dataset.selected="true"; btn.setAttribute("aria-pressed","true");
-      selected.push(nome);
-    }
-    updateCTA();
-  }
-
-  function updateCTA(){
-    criarBtn.disabled = !(temaEl.value.trim().length && selected.length);
-  }
-
-  temaEl.addEventListener("input", updateCTA);
-
-  limparBtn.addEventListener("click", ()=>{
-    temaEl.value=""; selected.length=0; saida.value="";
-    $$(".chip", chipsBox).forEach(c=>{c.dataset.selected="false"; c.setAttribute("aria-pressed","false");});
-    updateCTA(); toast("Limpou tudo."); window.scrollTo({top:0, behavior:"smooth"});
-  });
-
-  criarBtn.addEventListener("click", ()=>{
-    const tema = temaEl.value.trim();
-    if(!tema){ toast("Digite um tema."); return; }
-    if(!selected.length){ toast("Selecione ao menos 1 sessão."); return; }
-    const sequencia = selected.join(" → ");
-    const prompt = BASE_PROMPT
-      .replace("[INSERIR TEMA AQUI]", tema)
-      .replace("[INSERIR AQUI A SEQUÊNCIA DE SESSÕES DEFINIDA PELO USUÁRIO]", sequencia);
-    saida.value = prompt;
-    toast("Prompt criado!");
-    saida.focus(); saida.scrollIntoView({behavior:"smooth", block:"center"});
-  });
-
-  async function copyOut(){
-    try{ await navigator.clipboard.writeText(saida.value); toast("Copiado!"); }
-    catch(e){ toast("Não consegui copiar automaticamente."); }
-  }
-  async function shareOut(){
-    const text = saida.value;
-    if(navigator.share){
-      try{ await navigator.share({title:"Prompt — direito.love", text}); } catch(_){}
-    }else{
-      await copyOut(); toast("Compartilhar não suportado — prompt copiado.");
-    }
-  }
-  copiar2.addEventListener("click", copyOut);
-  compartilhar2.addEventListener("click", shareOut);
-  novo2.addEventListener("click", ()=>{
-    temaEl.value=""; selected.length=0; saida.value="";
-    $$(".chip", chipsBox).forEach(c=>{c.dataset.selected="false"; c.setAttribute("aria-pressed","false");});
-    updateCTA(); temaEl.focus(); window.scrollTo({top:0, behavior:"smooth"});
-  });
-
-  temaEl.addEventListener("keydown", (e)=>{
-    if(e.key==="Enter" && !criarBtn.disabled){ e.preventDefault(); criarBtn.click(); }
-  });
-})();
-</script>
 </body>
 </html>
