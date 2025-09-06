@@ -7,31 +7,42 @@
 <meta name="theme-color" content="#FFFFFF" />
 <style>
   :root{
-    --bg:#ffffff;
-    --surface:#ECF3F1;
-    --text:#0E1116;
-    --muted:#50606E;      /* puxando do #405B73 suavizado */
-    --border:#D7E6E1;
-    --accent:#49A97D;
-    --accent-2:#69BFAC;
-    --chip:#ffffff;
-    --chip-hover:#F5FAF8;
-    --chip-on:#E6F5F0;
-    --chip-on-border:#BFE6D9;
+    /* PALETA (anexo): 575A6C, B4C540, E0E2D2, 3686C9 + fundo claro */
+    --bg:#ffffff;         /* fundo */
+    --surface:#E0E2D2;    /* cartões */
+    --text:#303646;       /* texto principal (escuro neutro) */
+    --muted:#575A6C;      /* texto secundário (da paleta) */
+    --border:#d6dbca;     /* bordas sutis sobre o surface */
+    --accent:#3686C9;     /* azul (ação primaria) */
+    --accent-2:#B4C540;   /* verde-lima (detalhes) */
+
+    --chip:#ffffff;             /* chip base (claro) */
+    --chip-hover:#f6f7f2;       /* hover discreto */
+    --chip-on:#EAF3FB;          /* chip selecionado (azul claro) */
+    --chip-on-border:#BFD9F1;
+
     --radius:14px;
-    --shadow:0 8px 28px rgba(0,0,0,.08);
-    --max-aside:820px;
+    --radius-chip:10px;         /* menos arredondado */
+    --shadow:0 6px 22px rgba(0,0,0,.08);
+    --max-aside:820px;          /* lateral alvo ~800px */
     --gap:16px;
     --font:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,system-ui,sans-serif;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
-  body{margin:0; background:var(--bg); color:var(--text); font:400 16px/1.5 var(--font); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+  body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.5 var(--font);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
   /* Topbar */
-  .topbar{position:sticky; top:0; z-index:30; background:color-mix(in oklab, var(--surface) 92%, white); border-bottom:1px solid var(--border); display:grid; place-items:center; padding:10px 16px;}
-  .topbar .logo{display:flex; align-items:center; gap:10px}
-  .topbar img{height:32px; width:auto; display:block}
-  .topbar .brand{font-weight:600; letter-spacing:.2px; color:var(--muted)}
+  .topbar{
+    position:sticky; top:0; z-index:30;
+    background:color-mix(in oklab, var(--surface) 92%, white);
+    border-bottom:1px solid var(--border);
+    display:grid; place-items:center; padding:10px 16px;
+  }
+  .topbar .logo{display:flex; align-items:center; gap:12px}
+  .topbar img{height:clamp(36px, 5vw, 56px); width:auto; display:block} /* LOGO MAIOR */
+  .topbar .brand{font-weight:700; color:var(--muted); letter-spacing:.2px}
+
   /* Layout */
   .wrap{display:grid; gap:var(--gap); grid-template-columns:1fr; padding:20px; max-width:1400px; margin:0 auto;}
   @media (min-width:1100px){ .wrap{grid-template-columns:1fr minmax(680px,var(--max-aside)); align-items:start;} }
@@ -39,38 +50,59 @@
   .builder{padding:20px}
   .section-title{font-size:14px; color:var(--muted); margin:8px 0 6px}
   label[for=tema]{display:block; font-size:14px; color:var(--muted); margin:4px 0 6px}
-  #tema{width:100%; border:1px solid var(--border); background:#fff; color:var(--text); padding:14px; border-radius:12px; font-size:16px; outline:none;}
-  #tema::placeholder{color:#7C8C99}
-  .chips{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:10px}
+  #tema{
+    width:100%; border:1px solid var(--border); background:#fff; color:var(--text);
+    padding:12px 14px; border-radius:12px; font-size:16px; outline:none;
+  }
+  #tema::placeholder{color:#8a91a0}
+
+  /* Chips compactos e discretos */
+  .chips{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px}
   @media (min-width:640px){ .chips{grid-template-columns:repeat(3,minmax(0,1fr));} }
-  @media (min-width:900px){ .chips{grid-template-columns:repeat(4,minmax(0,1fr));} }
+  @media (min-width:1100px){ .chips{grid-template-columns:repeat(4,minmax(0,1fr));} }
   .chip{
     border:1px solid var(--border); background:var(--chip); color:var(--text);
-    border-radius:999px; padding:10px 12px; font-size:13px; line-height:1; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; gap:8px; transition:.15s ease;
+    border-radius:var(--radius-chip); padding:8px 10px; font-size:12.5px; line-height:1.2; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:6px; transition:.15s ease;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; /* evita texto estourar */
   }
   .chip:hover{background:var(--chip-hover)}
   .chip[data-selected="true"]{
     background:var(--chip-on); border-color:var(--chip-on-border);
-    box-shadow: inset 0 0 0 1px rgba(73,169,125,.25);
+    box-shadow: inset 0 0 0 1px rgba(54,134,201,.20);
   }
   .chip .tick{display:none}
   .chip[data-selected="true"] .tick{display:inline; color:var(--accent)}
-  .actions{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap}
-  .btn{appearance:none; border:1px solid var(--border); background:#fff; color:var(--text); padding:12px 16px; border-radius:12px; font-size:15px; cursor:pointer; transition:.15s ease;}
+
+  /* Ações */
+  .actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
+  .btn{
+    appearance:none; border:1px solid var(--border); background:#fff; color:var(--text);
+    padding:10px 14px; border-radius:12px; font-size:14px; cursor:pointer; transition:.15s ease;
+  }
   .btn:hover{box-shadow:var(--shadow)}
-  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#083428; border:none; font-weight:600}
+  .btn.primary{background:var(--accent); color:#fff; border:none; font-weight:700} /* azul sólido p/ contraste */
   .btn:disabled{opacity:.45; cursor:not-allowed; box-shadow:none}
+
+  /* Lateral (resultado) */
   .aside{position:sticky; top:74px; padding:16px}
   .aside h3{margin:0 0 10px}
-  textarea#saida{width:100%; min-height:60vh; resize:vertical; padding:14px; border-radius:12px; border:1px solid var(--border); background:#fff; color:var(--text); font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:14px;}
+  textarea#saida{
+    width:100%; min-height:60vh; resize:vertical; padding:12px 14px; border-radius:12px;
+    border:1px solid var(--border); background:#fff; color:var(--text);
+    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:14px;
+  }
   .muted{color:var(--muted); font-size:13px}
+
+  /* Toast */
   .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#fff; color:var(--text); padding:10px 14px; border:1px solid var(--border); border-radius:999px; opacity:0; transition:.2s; z-index:60}
   .toast.show{opacity:1}
+
   .info{margin-top:6px; font-size:12px; color:var(--muted)}
 </style>
 </head>
 <body>
+  <!-- Topbar -->
   <header class="topbar card">
     <div class="logo" aria-label="direito.love">
       <img src="icons/logo.png" alt="direito.love" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'">
@@ -78,7 +110,9 @@
     </div>
   </header>
 
+  <!-- Layout -->
   <div class="wrap">
+    <!-- Builder -->
     <main class="builder card" id="builder" aria-labelledby="titulo-builder">
       <h2 id="titulo-builder" style="margin:2px 0 8px">Criador de Prompts — Estudantes de Direito</h2>
 
@@ -92,9 +126,10 @@
         <button id="criar" class="btn primary" disabled>Criar Prompt</button>
         <button id="limpar" class="btn" title="Limpar seleções">Limpar</button>
       </div>
-      <div class="info">Dica: a <strong>ordem que você seleciona</strong> os chips define a sequência das sessões no prompt.</div>
+      <div class="info">A <strong>ordem dos cliques</strong> define a sequência das sessões no prompt.</div>
     </main>
 
+    <!-- Resultado (lateral ~800px no desktop) -->
     <aside class="aside card">
       <h3>Resultado</h3>
       <p class="muted">O prompt completo aparece aqui após você clicar em <em>Criar Prompt</em>.</p>
@@ -115,12 +150,28 @@
   const $$ = (s, r=document) => [...r.querySelectorAll(s)];
   const toast = (msg, t=1800)=>{const el=$("#toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"), t);};
 
+  // 20 SESSÕES — título completo vai no title p/ hover, chip mostra com reticências se precisar
   const SESSOES = [
-    "Conceitos e Definições","Base Legal Essencial","Jurisprudência Majoritária","Doutrina Relevante",
-    "Exemplos e Casos Práticos","Quadro Comparativo","Questões de Fixação","Debates, Críticas e Tendências",
-    "Súmulas e Enunciados","Estrutura de Peça / Modelos","Checklist de Peça","Raciocínio Jurídico (passo a passo)",
-    "Mapa Mental","Flashcards","Erros Comuns","Checklist Final de Revisão","Casos Famosos / Leading Cases",
-    "Atualizações Recentes","Dicas de Prova (OAB/Concursos)","Referências Bibliográficas"
+    "Conceitos e Definições",
+    "Base Legal Essencial",
+    "Jurisprudência Majoritária",
+    "Doutrina Relevante",
+    "Exemplos e Casos Práticos",
+    "Quadro Comparativo",
+    "Questões de Fixação",
+    "Debates, Críticas e Tendências",
+    "Súmulas e Enunciados",
+    "Estrutura de Peça / Modelos",
+    "Checklist de Peça",
+    "Raciocínio Jurídico (passo a passo)",
+    "Mapa Mental",
+    "Flashcards",
+    "Erros Comuns",
+    "Checklist Final de Revisão",
+    "Casos Famosos / Leading Cases",
+    "Atualizações Recentes",
+    "Dicas de Prova (OAB/Concursos)",
+    "Referências Bibliográficas"
   ];
 
   const BASE_PROMPT = `Você deve assumir a persona de uma **equipe de professores especialistas em todas as áreas do Direito brasileiro**, formada também por **pesquisadores de súmulas e jurisprudências**. Todos fazem parte da equipe **direito.love**.
@@ -170,10 +221,12 @@ Ao finalizar todas as sessões solicitadas, conclua sempre com:
   const compartilhar2 = $("#compartilhar2");
   const novo2 = $("#novo2");
 
+  // Monta chips compactos
   SESSOES.forEach((nome, idx)=>{
     const b = document.createElement("button");
     b.className="chip"; b.type="button"; b.setAttribute("aria-pressed","false");
     b.dataset.selected="false"; b.dataset.index=String(idx);
+    b.title = nome; // hover mostra o nome completo
     b.innerHTML=`<span class="tick">✔</span><span class="txt">${nome}</span>`;
     b.addEventListener("click", ()=>toggleChip(b, nome));
     chipsBox.appendChild(b);
@@ -201,6 +254,7 @@ Ao finalizar todas as sessões solicitadas, conclua sempre com:
     temaEl.value=""; selected.length=0; saida.value="";
     $$(".chip", chipsBox).forEach(c=>{c.dataset.selected="false"; c.setAttribute("aria-pressed","false");});
     updateCTA(); toast("Limpou tudo.");
+    window.scrollTo({top:0, behavior:"smooth"});
   });
 
   criarBtn.addEventListener("click", ()=>{
@@ -213,7 +267,6 @@ Ao finalizar todas as sessões solicitadas, conclua sempre com:
       .replace("[INSERIR AQUI A SEQUÊNCIA DE SESSÕES DEFINIDA PELO USUÁRIO]", sequencia);
     saida.value = prompt;
     toast("Prompt criado!");
-    // foco e rolagem para mostrar o resultado
     saida.focus(); saida.scrollIntoView({behavior:"smooth", block:"center"});
   });
 
@@ -224,11 +277,9 @@ Ao finalizar todas as sessões solicitadas, conclua sempre com:
   async function shareOut(){
     const text = saida.value;
     if(navigator.share){
-      try{ await navigator.share({title:"Prompt — direito.love", text}); }
-      catch(_){}
+      try{ await navigator.share({title:"Prompt — direito.love", text}); } catch(_){}
     }else{
-      await copyOut();
-      toast("Compartilhar não suportado — prompt copiado.");
+      await copyOut(); toast("Compartilhar não suportado — prompt copiado.");
     }
   }
   copiar2.addEventListener("click", copyOut);
@@ -239,7 +290,7 @@ Ao finalizar todas as sessões solicitadas, conclua sempre com:
     updateCTA(); temaEl.focus(); window.scrollTo({top:0, behavior:"smooth"});
   });
 
-  // Enter no tema aciona criar (se válido)
+  // Enter no tema cria (se válido)
   temaEl.addEventListener("keydown", (e)=>{
     if(e.key==="Enter" && !criarBtn.disabled){ e.preventDefault(); criarBtn.click(); }
   });
